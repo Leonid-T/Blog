@@ -1,8 +1,8 @@
-from rest_framework import viewsets, permissions, pagination, filters
+from rest_framework import viewsets, permissions, pagination, filters, generics
 from rest_framework.response import Response
 
 from .models import Post
-from .serializers import PostSerializer
+from .serializers import PostSerializer, RegisterSerializer, UserSerializer
 
 
 class PageNumberSetPagination(pagination.PageNumberPagination):
@@ -19,3 +19,27 @@ class PostViewSet(viewsets.ModelViewSet):
     lookup_field = 'slug'
     permission_classes = [permissions.AllowAny]
     pagination_class = PageNumberSetPagination
+
+
+class RegisterView(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = RegisterSerializer
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        return Response({
+            'user': UserSerializer(user, context=self.get_serializer_context()).data,
+            'message': 'Пользователь успешно создан',
+        })
+
+
+class ProfileView(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = UserSerializer
+
+    def get(self, request):
+        return Response({
+            'user': UserSerializer(request.user, context=self.get_serializer_context()).data,
+        })
