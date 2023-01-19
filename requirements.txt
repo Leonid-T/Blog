@@ -1,0 +1,8 @@
+django
+djangorestframework
+djangorestframework-simplejwt
+django-cors-headers
+django-ckeditor
+django-taggit
+django-taggit-serializer
+pillow

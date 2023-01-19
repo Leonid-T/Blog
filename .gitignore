@@ -1,2 +1,5 @@
+.idea/
 env/
 *run_server.bat
+**/__pycache__/**
+media/
