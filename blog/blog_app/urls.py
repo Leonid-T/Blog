@@ -12,4 +12,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('register/', views.RegisterView.as_view()),
     path('profile/', views.ProfileView.as_view()),
+    path('comment/', views.CommentView.as_view()),
+    path('comment/<slug:post_slug>', views.CommentView.as_view()),
 ]

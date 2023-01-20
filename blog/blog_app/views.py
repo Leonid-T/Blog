@@ -1,8 +1,8 @@
 from rest_framework import viewsets, permissions, pagination, filters, generics
 from rest_framework.response import Response
 
-from .models import Post
-from .serializers import PostSerializer, RegisterSerializer, UserSerializer
+from .models import Post, Comment
+from .serializers import PostSerializer, RegisterSerializer, UserSerializer, CommentSerializer
 
 
 class PageNumberSetPagination(pagination.PageNumberPagination):
@@ -43,3 +43,14 @@ class ProfileView(generics.GenericAPIView):
         return Response({
             'user': UserSerializer(request.user, context=self.get_serializer_context()).data,
         })
+
+
+class CommentView(generics.ListCreateAPIView):
+    queryset = Comment.objects.order_by('-added_at')
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        post_slug = self.kwargs['post_slug'].lower()
+        post = Post.objects.get(slug=post_slug)
+        return Comment.objects.filter(post=post).order_by('-added_at')
