@@ -32,6 +32,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'ckeditor',
     'ckeditor_uploader',
+    'taggit',
+    'taggit_serializer',
 ]
 
 # jwt token configuration

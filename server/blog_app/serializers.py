@@ -16,7 +16,7 @@ class PostSerializer(serializers.ModelSerializer):
         }
 
 
-class RegisterSerializer(serializers.ModelSerializer):
+class CreateUserSerializer(serializers.ModelSerializer):
     password_repeat = serializers.CharField(write_only=True)
 
     class Meta:
@@ -31,9 +31,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        username = validated_data['username']
-        password = validated_data['password']
-        password_repeat = validated_data['password_repeat']
+        username = validated_data.get('username')
+        password = validated_data.get('password')
+        password_repeat = validated_data.get('password_repeat')
 
         if password != password_repeat:
             raise serializers.ValidationError({'password': 'Пароли не совпадают'})

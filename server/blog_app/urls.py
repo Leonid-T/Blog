@@ -5,13 +5,12 @@ from . import views
 
 
 router = DefaultRouter()
-router.register('posts', views.PostViewSet, basename='posts')
+router.register('post', views.PostViewSet, basename='post')
 
 app_name = 'blog_app'
 urlpatterns = [
     path('', include(router.urls)),
-    path('register/', views.RegisterView.as_view()),
-    path('profile/', views.ProfileView.as_view()),
-    path('comment/', views.CommentView.as_view()),
-    path('comment/<slug:post_slug>', views.CommentView.as_view()),
+    path('register/', views.CreateUserView.as_view()),
+    path('user/', views.UserView.as_view()),
+    path('post/<slug:post_slug>/comment/', views.CommentView.as_view()),
 ]
