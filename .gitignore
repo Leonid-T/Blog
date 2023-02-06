@@ -3,3 +3,4 @@ env/
 *run_server.bat
 **/__pycache__/**
 media/
+postgresql-data/
