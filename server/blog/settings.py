@@ -1,6 +1,6 @@
 from pathlib import Path
 from datetime import timedelta
-from os import path
+from os import path, environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -94,11 +94,11 @@ WSGI_APPLICATION = 'blog.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'blog',
-        'USER': 'postgres',
-        'PASSWORD': 'admin',
-        'HOST': 'postgres',
-        'PORT': '5432',
+        'NAME': environ.get('POSTGRES_DB', 'blog'),
+        'USER': environ.get('POSTGRES_USER', 'postgres'),
+        'PASSWORD': environ.get('POSTGRES_PASSWORD', 'admin'),
+        'HOST': environ.get('SQL_HOST', 'localhost'),
+        'PORT': environ.get('SQL_PORT', '5432'),
     }
 }
 

@@ -12,7 +12,8 @@ class PostSerializer(serializers.ModelSerializer):
         fields = '__all__'
         lookup_field = 'slug'
         extra_kwargs = {
-            'url': {'lookup_field': 'slug'}
+            'url': {'lookup_field': 'slug'},
+            'slug': {'read_only': True}
         }
 
 
