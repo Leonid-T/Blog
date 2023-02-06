@@ -1,11 +1,14 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from taggit.models import Tag
+from taggit.serializers import TagListSerializerField, TaggitSerializer
 
 from .models import Post, Comment
 
 
-class PostSerializer(serializers.ModelSerializer):
+class PostSerializer(TaggitSerializer, serializers.ModelSerializer):
     author = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
+    tags = TagListSerializerField()
 
     class Meta:
         model = Post
@@ -61,4 +64,14 @@ class CommentSerializer(serializers.ModelSerializer):
         lookup_field = 'id'
         extra_kwargs = {
             'url': {'lookup_field': 'id'}
+        }
+
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = '__all__'
+        lookup_field = 'slug'
+        extra_kwargs = {
+            'url': {'lookup_field': 'slug'}
         }

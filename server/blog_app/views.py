@@ -1,9 +1,10 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, permissions, pagination, filters, generics, mixins, status
 from rest_framework.response import Response
+from taggit.models import Tag
 
 from .models import Post, Comment
-from .serializers import PostSerializer, CreateUserSerializer, UserSerializer, CommentSerializer
+from .serializers import PostSerializer, CreateUserSerializer, UserSerializer, CommentSerializer, TagSerializer
 
 
 class PageNumberSetPagination(pagination.PageNumberPagination):
@@ -26,6 +27,8 @@ class PostViewSet(viewsets.ModelViewSet):
             'description': request.data.get('description'),
             'content': request.data.get('content'),
             'author': request.user,
+            'image': request.data.get('image'),
+            'tags': request.data.get('tags'),
         })
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -116,3 +119,20 @@ class CommentViewSet(mixins.ListModelMixin,
 
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class TagPostView(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = PostSerializer
+    pagination_class = PageNumberSetPagination
+
+    def get_queryset(self):
+        tag_slug = self.kwargs.get('tag_slug')
+        tag = Tag.objects.get(slug=tag_slug)
+        return Post.objects.filter(tags=tag).order_by('-added_at')
+
+
+class TagView(generics.ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = TagSerializer
+    queryset = Tag.objects.all()

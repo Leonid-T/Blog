@@ -13,5 +13,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('register/', views.CreateUserView.as_view()),
     path('user/', views.UserView.as_view()),
-    # path('post/<slug:post_slug>/comment/', views.CommentView.as_view()),
+    path('tag/', views.TagView.as_view()),
+    path('tag/<slug:tag_slug>/post/', views.TagPostView.as_view()),
 ]
